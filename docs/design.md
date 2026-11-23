@@ -109,7 +109,7 @@ What that asks of this unit is kept true now:
 
 The console is where a person signs in and sees every unit's screen, and how each unit reaches it is the console
 plugin contract (bmo-ui `docs/console-bundles.md`). This unit serves its console face through bmo-chat's
-`bmo-console-face`, as bmo-attendance does, and its browser bundle is built from the Nuxt project under `client/`.
+`bmo-console-face`, and its browser bundle is built from the Nuxt project under `client/`.
 
 - **One entry, placed by the reader's role.** The bundle's entry is 고객의 소리. For a sender it stands in the
   console's user menu, the reader's own menu (the contract's `account` section), since sending the maker a word is

@@ -235,7 +235,7 @@ pub fn report(kind: &str, title: &str) -> Value {
     "kind": kind,
     "title": title,
     "body": "The save button does nothing.\n\n- open the form\n- press save",
-    "context": { "path": "/attendance/month", "consoleVersion": "0.1.0-rev.1", "browser": "Test Browser 1.0" },
+    "context": { "path": "/calendar/month", "consoleVersion": "0.1.0-rev.1", "browser": "Test Browser 1.0" },
   })
 }
 

@@ -50,7 +50,7 @@ async fn a_report_is_sent_whole_with_its_files_and_the_names_it_was_signed_with(
   assert_eq!(sent["body"], written["body"]);
   assert_eq!(
     sent["context"],
-    json!({ "path": "/attendance/month", "consoleVersion": "0.1.0-rev.1", "browser": "" })
+    json!({ "path": "/calendar/month", "consoleVersion": "0.1.0-rev.1", "browser": "" })
   );
   assert_eq!(sent["state"], "received");
   assert_eq!(sent["sender"], json!({ "user": SENDER, "name": "Test Sender" }));
