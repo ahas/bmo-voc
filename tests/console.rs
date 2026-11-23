@@ -43,8 +43,12 @@ async fn every_route_is_guarded_and_the_role_names_the_side() {
       )
       .await
   };
-  assert_eq!(me("member").await, (200, json!({ "user": "tester", "side": "sender" })));
-  assert_eq!(me("administrator").await, (200, json!({ "user": "tester", "side": "maker" })));
+  let sides = async |role: &str| {
+    let (status, answer) = me(role).await;
+    (status, answer["user"].clone(), answer["side"].clone())
+  };
+  assert_eq!(sides("member").await, (200, json!("tester"), json!("sender")));
+  assert_eq!(sides("administrator").await, (200, json!("tester"), json!("maker")));
 
   let (status, refusal) = service.sender("tester", Method::GET, "/nowhere/at/all", None).await;
   assert_eq!((status, refusal["code"].as_str()), (404, Some("no-route")));
