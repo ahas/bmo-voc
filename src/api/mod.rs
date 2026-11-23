@@ -21,7 +21,7 @@ use crate::access::{caller, credential};
 use crate::app::App;
 use crate::error::ApiError;
 use crate::store::{self, Filter};
-use crate::wire::{Company, Health, Me, Page, Side, Unread};
+use crate::wire::{Company, Health, Limits, Me, Page, Side, Unread};
 
 type Answer<T> = Result<T, ApiError>;
 
@@ -110,9 +110,14 @@ async fn health(State(served): State<Served>, headers: HeaderMap) -> Answer<Json
 
 async fn me(State(served): State<Served>, headers: HeaderMap) -> Answer<Json<Me>> {
   let caller = caller(&served.app, &headers)?;
+  let bounds = &served.app.settings.attachments;
   Ok(Json(Me {
     user: caller.user,
     side: caller.side,
+    limits: Limits {
+      max_files: bounds.max_files,
+      max_bytes: bounds.max_bytes,
+    },
   }))
 }
 

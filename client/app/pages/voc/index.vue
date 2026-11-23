@@ -263,7 +263,7 @@ useVocEvents(() => {
 
 onMounted(async () => {
   voc.arrived();
-  await voc.load();
+  await voc.arrive();
 
   if (voc.me.value === null) return;
 

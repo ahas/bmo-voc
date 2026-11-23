@@ -40,7 +40,8 @@ export interface ReportList {
 export function useReportList(filter: () => ReportFilter): ReportList {
   const voc = useVoc();
   const kept = useKept();
-  const keyOf = computed(() => JSON.stringify(filter()));
+  // Kept by the reader as well as the filter, so a list one reader read is never shown to another.
+  const keyOf = computed(() => JSON.stringify([voc.me.value?.user ?? null, voc.me.value?.side ?? null, filter()]));
 
   const reading = ref(false);
   const loadingMore = ref(false);

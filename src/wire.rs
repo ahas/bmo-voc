@@ -50,6 +50,18 @@ pub struct Me {
   /// The account service's user id; null for a reader of everything.
   pub user: Option<String>,
   pub side: Side,
+  /// What one report may carry, as the settings bound it, so a form holds files to the bounds the send is held to.
+  pub limits: Limits,
+}
+
+/// What one report may carry (`docs/api.md`, 「Reports」).
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct Limits {
+  /// How many files at most.
+  pub max_files: usize,
+  /// How large one file may be, in bytes.
+  pub max_bytes: usize,
 }
 
 // ---------------------------------------------------------------------------------------------------------

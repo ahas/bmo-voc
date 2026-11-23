@@ -111,9 +111,35 @@
           }
         ]
       },
+      "Limits": {
+        "description": "What one report may carry (`docs/api.md`, 「Reports」).",
+        "properties": {
+          "maxBytes": {
+            "description": "How large one file may be, in bytes.",
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxFiles": {
+            "description": "How many files at most.",
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "maxFiles",
+          "maxBytes"
+        ],
+        "type": "object"
+      },
       "Me": {
         "description": "`GET /me`.",
         "properties": {
+          "limits": {
+            "$ref": "#/components/schemas/Limits",
+            "description": "What one report may carry, as the settings bound it, so a form holds files to the bounds the send is held to."
+          },
           "side": {
             "$ref": "#/components/schemas/Side"
           },
@@ -127,7 +153,8 @@
         },
         "required": [
           "user",
-          "side"
+          "side",
+          "limits"
         ],
         "type": "object"
       },

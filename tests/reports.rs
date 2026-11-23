@@ -300,7 +300,10 @@ async fn a_reader_of_everything_reads_every_report_and_writes_nothing() {
 
   assert_eq!(
     service.everything(Method::GET, "/me", None).await,
-    (200, json!({ "user": null, "side": "reader" }))
+    (
+      200,
+      json!({ "user": null, "side": "reader", "limits": { "maxFiles": MAX_FILES, "maxBytes": MAX_BYTES } })
+    )
   );
   let (status, read) = service.everything(Method::GET, &format!("/reports/{id}"), None).await;
   assert_eq!((status, read["unread"].as_bool()), (200, Some(false)));

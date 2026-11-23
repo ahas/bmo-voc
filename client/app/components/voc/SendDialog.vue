@@ -15,7 +15,7 @@
       <GrowingTextarea v-model="body" class="w-full" :rows="6" :maxlength="BODY_MAX" @paste="pasted" />
     </UFormField>
 
-    <UFormField :label="$t('voc.label.files')" :hint="$t('voc.hint.files', { count: MAX_FILES.toLocaleString(locale), size: sizeText(MAX_BYTES, locale) })" :error="filesError">
+    <UFormField :label="$t('voc.label.files')" :hint="$t('voc.hint.files', { count: maxFiles.toLocaleString(locale), size: sizeText(maxBytes, locale) })" :error="filesError">
       <div class="flex min-w-0 flex-col gap-2">
         <ul v-if="files.length > 0" class="flex min-w-0 flex-col gap-1" :aria-label="$t('voc.label.files')">
           <li v-for="(file, at) in files" :key="`${file.name}-${at}`" class="flex min-h-10 min-w-0 items-center gap-2 rounded-md bg-elevated ps-2 text-sm">
@@ -54,7 +54,7 @@ import { fileIcon } from "bmo-ui/app/domain/file-icons";
 import { useVoc } from "../../composables/useVoc";
 import { Refusal } from "../../domain/api";
 import { sizeText } from "../../domain/reports";
-import { BODY_MAX, KINDS, MAX_BYTES, MAX_FILES, TITLE_MAX } from "../../../shared/types";
+import { BODY_MAX, KINDS, TITLE_MAX } from "../../../shared/types";
 
 import type { Context, Kind, Report } from "../../../shared/types";
 
@@ -64,6 +64,9 @@ const emit = defineEmits<{ sent: [report: Report] }>();
 
 const { t } = useI18n();
 const voc = useVoc();
+// What one report may carry, as the service answered the reader; a form opens only once the reader is read.
+const maxFiles = computed(() => voc.me.value?.limits.maxFiles ?? 0);
+const maxBytes = computed(() => voc.me.value?.limits.maxBytes ?? 0);
 const locale = useAppConfig().bmoUi?.locale;
 
 // The codes the service refuses a file with, said beside the files rather than on the pill.
@@ -84,11 +87,11 @@ const changes = useOpenedWith(() => ({ kind: kind.value, title: title.value, bod
 
 /** What the files break of the bounds, said before the send; the service's own refusal where it gave one. */
 const filesError = computed<string | undefined>(() => {
-  if (files.value.length > MAX_FILES) return t("voc.message.too_many_files", { count: MAX_FILES.toLocaleString(locale) });
+  if (files.value.length > maxFiles.value) return t("voc.message.too_many_files", { count: maxFiles.value.toLocaleString(locale) });
 
-  const large = files.value.find((file) => file.size > MAX_BYTES);
+  const large = files.value.find((file) => file.size > maxBytes.value);
 
-  if (large !== undefined) return t("voc.message.file_too_large", { name: large.name, size: sizeText(MAX_BYTES, locale) });
+  if (large !== undefined) return t("voc.message.file_too_large", { name: large.name, size: sizeText(maxBytes.value, locale) });
 
   const empty = files.value.find((file) => file.size === 0);
 

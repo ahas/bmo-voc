@@ -49,6 +49,17 @@ const _useVoc = () => {
     }
   }
 
+  /**
+   * The reader read afresh as a screen of the voc opens. The console signs a person out and another in without a page
+   * read, so the reader kept from an earlier visit may be somebody else: nothing of a side is drawn until the reader
+   * is read again.
+   */
+  async function arrive(): Promise<void> {
+    me.value = null;
+    meFailure.value = null;
+    await load(true);
+  }
+
   /** Notes where the reader came from, as the router recorded the address before the one opened. */
   function arrived(): void {
     const back = cameFromPath((window.history.state as { back?: unknown } | null)?.back, SCREEN_PATH);
@@ -92,7 +103,7 @@ const _useVoc = () => {
     return relayAddress(SERVICE, attachmentPath(reportId, attachmentId));
   }
 
-  return { api, me, meFailure, cameFrom, load, arrived, context, codeWords, readWords, failed, told, attachmentAddress };
+  return { api, me, meFailure, cameFrom, load, arrive, arrived, context, codeWords, readWords, failed, told, attachmentAddress };
 };
 
 export const useVoc = createAppComposable(_useVoc);

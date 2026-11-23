@@ -15,6 +15,14 @@ export type Side = (typeof SIDES)[number];
 export interface Me {
   user: string | null;
   side: Side;
+  /** What one report may carry, as the service's settings bound it. */
+  limits: Limits;
+}
+
+/** How many files one report carries at most, and how large one may be, in bytes. */
+export interface Limits {
+  maxFiles: number;
+  maxBytes: number;
 }
 
 /** What a report is: a fault met, or a change wanted. */
@@ -116,13 +124,6 @@ export interface ReportFilter {
 export const TITLE_MAX = 200;
 export const BODY_MAX = 20_000;
 export const FILE_NAME_MAX = 200;
-
-/**
- * What one report carries, as the service's settings ship them (`[attachments] max_files` and `max_bytes`). A
- * deployment may set others; these are the hints the form shows, and the service's answer is the judge.
- */
-export const MAX_FILES = 5;
-export const MAX_BYTES = 10 * 1024 * 1024;
 
 /** The picture types a browser shows, which the service answers inline. */
 export const PICTURE_TYPES = ["image/png", "image/jpeg", "image/gif", "image/webp"] as const;

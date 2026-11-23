@@ -146,7 +146,7 @@ for (const width of WIDTHS) {
 
       await dialog.getByRole("radio", { name: say("voc.kind.suggestion") }).click();
       await dialog.getByRole("textbox", { name: new RegExp(say("voc.label.title")) }).fill("Search is slow");
-      await dialog.getByRole("textbox", { name: new RegExp(say("voc.label.body")) }).fill("It takes **ten** seconds.");
+      await dialog.getByRole("textbox", { name: new RegExp(say("voc.label.body")) }).fill("It takes **ten** seconds.\n\n![trace](https://example.invalid/trace.png)");
       await dialog.locator("[data-file-picker]").setInputFiles({ name: "trace.txt", mimeType: "text/plain", buffer: Buffer.from("trace lines") });
       await dialog.getByText("trace.txt").waitFor();
       await dialog.getByRole("button", { name: say("voc.action.send"), exact: true }).click();
@@ -155,6 +155,8 @@ for (const width of WIDTHS) {
       expect(new URL(page.url()).pathname).toBe("/voc/r-4");
       expect(await page.getByRole("link", { name: say("voc.aria.download", { name: "trace.txt" }) }).isVisible()).toBe(true);
       expect(await page.locator("strong", { hasText: "ten" }).isVisible()).toBe(true);
+      // A picture written into the body is fetched from nowhere: a report's pictures are its attachments.
+      expect(await page.locator('img[src^="https:"]').count()).toBe(0);
       expect(await sideScroll(page)).toBe(false);
 
       const sent = host!.service.asked.findLast((call) => call.method === "POST" && call.path === "/reports")!.body as { report: { kind: string; title: string; context: typeof CONTEXT }; files: string[] };

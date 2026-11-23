@@ -39,7 +39,7 @@ The service listens on the loopback at the address its settings name (`[server] 
 
 | Method | Path | Does |
 |---|---|---|
-| GET | `/me` | `user` (null for a reader of everything) and `side`: `maker`, `sender`, or `reader` for a reader of everything |
+| GET | `/me` | `user` (null for a reader of everything), `side`: `maker`, `sender`, or `reader` for a reader of everything, and `limits`: what one report may carry, `maxFiles` and `maxBytes` as the settings' `[attachments]` bound them |
 
 ## Reports
 

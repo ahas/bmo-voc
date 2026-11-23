@@ -1,4 +1,4 @@
-import type { Attachment, Company, Context, Kind, Person, Reply, Report, ReportSummary, Side, State, StateEntry } from "../../shared/types";
+import type { Attachment, Company, Context, Kind, Limits, Person, Reply, Report, ReportSummary, Side, State, StateEntry } from "../../shared/types";
 
 // A stand-in of the voc service for the browser tests: every route the screens call, answered from memory as
 // `docs/api.md` states them, so a test drives the screens without the service and its peers. The side the reader
@@ -21,6 +21,8 @@ export const TITLES = {
 
 export const MAKER_REPLY = "We are looking into it.";
 export const CONTEXT: Context = { path: "/calendar/2030-05", consoleVersion: "1.4.0", browser: "Test Browser 1.0" };
+// What one report may carry, as the service ships its settings.
+export const LIMITS: Limits = { maxFiles: 5, maxBytes: 10 * 1024 * 1024 };
 
 // A picture of one pixel, which a browser draws.
 const PIXEL = Uint8Array.from(atob("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFBQIAX8jx0gAAAABJRU5ErkJggg=="), (char) => char.charCodeAt(0));
@@ -163,7 +165,7 @@ export function standIn(): StandIn {
     const method = request.method;
     const one = /^\/reports\/([^/]+)(\/.*)?$/.exec(path);
 
-    if (path === "/me" && method === "GET") return json({ user: service.side === "maker" ? MAKER.user : SENDER.user, side: service.side });
+    if (path === "/me" && method === "GET") return json({ user: service.side === "maker" ? MAKER.user : SENDER.user, side: service.side, limits: LIMITS });
 
     if (path === "/events") {
       // An open stream that says nothing, as the service's does while nothing happens.

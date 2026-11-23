@@ -222,7 +222,7 @@ watch(reportId, () => {
 
 onMounted(() => {
   voc.arrived();
-  void voc.load();
+  void voc.arrive();
   void read();
 });
 </script>
