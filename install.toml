@@ -1,0 +1,58 @@
+# What installing the customers' voice on a fresh machine needs, read by the testbed's install verb (bmo-testbed's
+# docs/install.md, 「The install declaration」). The settings are docs/api.md's 「Settings」.
+
+install = 1
+
+restart = "systemctl --user restart bmo-voc.service"
+
+[[needs]]
+program = "cargo"
+what = "Builds the service; the Rust toolchain from https://rustup.rs."
+
+[[needs]]
+program = "bun"
+what = "Builds the console bundle at every release; the Bun runtime from https://bun.sh."
+
+[[port]]
+name = "voc.server"
+number = 13134
+
+[[token]]
+name = "voc.service"
+file = "env/voc-service.token"
+
+[[token]]
+name = "voc.console"
+file = "env/voc-console.token"
+
+# The release's settings.local.toml. The store and the attachments stand under the data root; the account service
+# is named outright, at its address with its token.
+[[settings]]
+file = "env/voc.toml"
+text = """
+[server]
+listen = "127.0.0.1:{{port.voc.server}}"
+token = "{{token.voc.service}}"
+data_root = "{{data_root}}"
+
+[console]
+token = "{{token.voc.console}}"
+
+[store]
+path = "{{data_root}}/voc/voc.db"
+files = "{{data_root}}/voc/files"
+
+[accounts]
+address = "{{value.web.address}}"
+token = "{{token.web.server}}"
+"""
+
+[[line]]
+file = "env/web-console.env"
+key = "VOC_ADDRESS"
+value = "http://127.0.0.1:{{port.voc.server}}"
+
+[[line]]
+file = "env/web-console.env"
+key = "VOC_TOKEN"
+value = "{{token.voc.console}}"
