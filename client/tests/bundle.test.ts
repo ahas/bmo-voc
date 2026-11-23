@@ -6,11 +6,11 @@ import { parse } from "vue/compiler-sfc";
 
 import { WORDED_CODES } from "../app/domain/codes";
 import { KINDS, SIDES, STATES } from "../shared/types";
-import { EN, KO, keysOf, word } from "./words";
+import { EN, KO, PACKS, keysOf, word } from "./words";
 
-// The bundle as the contract holds it (bmo-ui's `docs/console-bundles.md`): the words answer in both locales with
-// the same keys under the bundle's own namespace, every key a screen writes or builds from a value stands in both
-// packs, every code of the API has its words, the notices the service declares have theirs, and no Korean stands
+// The bundle as the contract holds it (bmo-ui's `docs/console-bundles.md`): the words answer in every locale with
+// the same keys under the bundle's own namespace, every key a screen writes or builds from a value stands in every
+// pack, every code of the API has its words, the notices the service declares have theirs, and no Korean stands
 // in the sources themselves. The manifest is the service's, read through bmo-ui's own reading by the service's tests.
 
 const ROOT = join(import.meta.dirname, "..");
@@ -31,21 +31,31 @@ function apiSection(heading: string): string {
   return api.slice(from, api.indexOf("\n## ", from + 1));
 }
 
-test("the two word packs hold the same keys, all under the bundle's name", () => {
+test("every word pack holds the same keys, all under the bundle's name", () => {
   const en = keysOf(EN);
-  const ko = keysOf(KO);
 
+  expect(Object.keys(PACKS).sort()).toEqual(["en", "ja", "ko", "zh-CN"]);
   expect(en.length).toBeGreaterThan(60);
-  expect(ko.sort()).toEqual(en.sort());
+
+  for (const [locale, pack] of Object.entries(PACKS)) expect(keysOf(pack).sort(), locale).toEqual(en.sort());
   expect(en.every((key) => key.startsWith("voc."))).toBe(true);
 });
 
-test("the title key the manifest names stands in both packs", () => {
-  expect(word(EN, "voc.title")).toBe("Customer voice");
-  expect(word(KO, "voc.title")).toBeString();
+test("every pack's word fills the same placeholders as the English one", () => {
+  const placeholders = (said: unknown): string[] => [...String(said).matchAll(/\{([a-zA-Z_]+)\}/g)].map((match) => match[1]!).sort();
+
+  for (const [locale, pack] of Object.entries(PACKS)) {
+    for (const key of keysOf(EN)) expect(placeholders(word(pack, key)), `${locale} ${key}`).toEqual(placeholders(word(EN, key)));
+  }
 });
 
-test("the words the screens build from a value stand in both packs", () => {
+test("the title key the manifest names stands in every pack", () => {
+  expect(word(EN, "voc.title")).toBe("Customer voice");
+
+  for (const [locale, pack] of Object.entries(PACKS)) expect(word(pack, "voc.title"), locale).toBeString();
+});
+
+test("the words the screens build from a value stand in every pack", () => {
   const built = [
     ...KINDS.map((kind) => `voc.kind.${kind}`),
     ...STATES.map((state) => `voc.state.${state}`),
@@ -54,8 +64,7 @@ test("the words the screens build from a value stand in both packs", () => {
   ];
 
   for (const key of built) {
-    expect(word(EN, key), key).toBeString();
-    expect(word(KO, key), key).toBeString();
+    for (const pack of Object.values(PACKS)) expect(word(pack, key), key).toBeString();
   }
 });
 
@@ -70,14 +79,14 @@ test("every error code of the API a screen can meet has its words", () => {
   for (const code of new Set([...codes, ...common])) expect(WORDED_CODES as readonly string[], code).toContain(code);
 });
 
-test("every notice kind the API names rings in words of both packs", () => {
+test("every notice kind the API names rings in words of every pack", () => {
   const console = apiSection("Console");
   const kinds = [...console.slice(console.indexOf("notice kinds")).matchAll(/`(report\.[a-z]+)`/g)].map((match) => match[1]!);
 
   expect(new Set(kinds).size).toBe(3);
 
   for (const kind of kinds) {
-    for (const pack of [EN, KO]) expect(word(pack, `voc.notice.${kind}.title`), kind).toBeString();
+    for (const pack of Object.values(PACKS)) expect(word(pack, `voc.notice.${kind}.title`), kind).toBeString();
   }
 });
 

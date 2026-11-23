@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-// The bundle's two word packs, read as the build writes them into one object, and the two ways the tests look
-// into them: a key read down its dotted path, and every key of a pack listed.
+// The bundle's word packs, one to a locale, read as the build writes them into one object, and the two ways the
+// tests look into them: a key read down its dotted path, and every key of a pack listed.
 
 const ROOT = join(import.meta.dirname, "..");
 
@@ -14,6 +14,11 @@ function pack(locale: string): Pack {
 
 export const EN = pack("en");
 export const KO = pack("ko");
+export const JA = pack("ja");
+export const ZH_CN = pack("zh-CN");
+
+/** Every pack the bundle ships, by its locale code. */
+export const PACKS: Record<string, Pack> = { en: EN, ko: KO, ja: JA, "zh-CN": ZH_CN };
 
 /** The value a key of the pack holds, read down its dotted path, or nothing where no such key stands. */
 export function word(within: Pack, key: string): unknown {

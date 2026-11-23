@@ -27,7 +27,8 @@ histories, their replies and each side's read marks — in its own SQLite store 
   change check, which compiles it, neither declared in `testbed.toml`; `cargo test` through the testbed; and the
   console bundle's own `bun run check` in `client/`.
 - **English only** in code, documents, tests and commits; the only Korean stands in `docs/design.md` as the owner's
-  quoted words and the screen's words it names, and in the bundle's `ko` words.
+  quoted words and the screen's words it names, and in the bundle's `ko` words; Japanese and Chinese stand in the
+  bundle's `ja` and `zh-CN` words alone, besides the README's translations.
 - **No personal data, no names of agents, owners, hosts or companies, and no public addresses** in code, documents
   or commits; a public name, a port and a credential are deployment settings (`PERSONAL-DATA.md`).
 - **Versions:** `0.1.0-rev.N` until a release the owner declares; no sibling version pins.

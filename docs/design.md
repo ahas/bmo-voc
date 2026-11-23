@@ -117,6 +117,8 @@ plugin contract (bmo-ui `docs/console-bundles.md`). This unit serves its console
   the 관리자 서비스 (the contract's sections by role). So a platform administrator never meets the send side.
 - **One screen path, two faces.** `/voc` opens the sender's own reports for a sender and the inbox for the maker;
   `/voc/{report}` opens one report's thread for either. The screen asks the service which side the reader is on.
+- **The screen speaks the console's language.** Its words are the bundle's pack in English, Korean, Japanese and
+  Simplified Chinese, one file to a locale (`en`, `ko`, `ja`, `zh-CN`), every file holding the same keys.
 
 ### The sender's screen
 

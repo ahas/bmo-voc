@@ -20,10 +20,11 @@ their attachments handed inline or as downloads, the events each reader is given
 served manifest read through bmo-ui's own reading on the release the client vendors, the OpenAPI document, and the
 repository's own checks.
 
-`client/` holds its own tests, run by `bun test` there: the two word packs agreeing key for key, every key a screen
-writes and every error code of `docs/api.md` standing in both, and no Korean in the sources; the API module's calls
-over a stand-in of the service. `client/tests/browser/` drives both faces of the screen in a real browser, at a
-desktop's width and a phone's, over the bundle's dev host and a stand-in of the service.
+`client/` holds its own tests, run by `bun test` there: the four word packs (English, Korean, Japanese and Simplified
+Chinese) agreeing key for key and placeholder for placeholder, every key a screen writes and every error code of
+`docs/api.md` standing in each, and no Korean in the sources; the API module's calls over a stand-in of the service.
+`client/tests/browser/` drives both faces of the screen in a real browser, at a desktop's width and a phone's, over
+the bundle's dev host and a stand-in of the service.
 
 ## Layout
 

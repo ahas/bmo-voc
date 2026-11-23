@@ -1,11 +1,14 @@
 // The dev host speaks to its screens with the bundle's own words and the few of the layer's `common.*` words the
 // screens draw, which a console answers from its own pack: vue-i18n stood up by hand, the bundle's pack read from
-// its i18n folder. The common words here stand only in this host, for a browser check to read real words.
+// its i18n folder. The common words here stand only in this host, for a browser check to read real words;
+// the Japanese and Chinese packs stand beside them, reading the common words in English.
 
 import { createI18n } from "vue-i18n";
 
 import en from "../../../i18n/en.json";
+import ja from "../../../i18n/ja.json";
 import ko from "../../../i18n/ko.json";
+import zhCN from "../../../i18n/zh-CN.json";
 
 const COMMON = {
   ko: {
@@ -33,7 +36,7 @@ export default defineNuxtPlugin({
   enforce: "pre",
   setup(nuxtApp) {
     nuxtApp.vueApp.use(
-      createI18n({ legacy: false, globalInjection: true, locale: "ko", fallbackLocale: "en", messages: { en: { ...en, common: COMMON.en }, ko: { ...ko, common: COMMON.ko } } })
+      createI18n({ legacy: false, globalInjection: true, locale: "ko", fallbackLocale: "en", messages: { en: { ...en, common: COMMON.en }, ko: { ...ko, common: COMMON.ko }, ja: { ...ja, common: COMMON.en }, "zh-CN": { ...zhCN, common: COMMON.en } } })
     );
   }
 });

@@ -1,0 +1,124 @@
+{
+  "voc": {
+    "title": "お客様の声",
+    "kind": {
+      "bug": "不具合",
+      "suggestion": "要望"
+    },
+    "state": {
+      "received": "受付",
+      "under-review": "検討中",
+      "done": "完了",
+      "declined": "却下"
+    },
+    "side": {
+      "maker": "管理者",
+      "sender": "送信者",
+      "reader": "閲覧のみ"
+    },
+    "action": {
+      "answer": "回答",
+      "attach": "ファイルを添付",
+      "back": "戻る",
+      "filter": "絞り込み",
+      "follow": "追加の意見を送る",
+      "load_more": "さらに表示",
+      "new_report": "新しい意見を送る",
+      "refresh": "更新",
+      "remove_file": "{name} を削除",
+      "send": "送信"
+    },
+    "label": {
+      "all_companies": "すべての会社",
+      "all_kinds": "すべての種類",
+      "all_states": "すべての状態",
+      "answer": "回答",
+      "body": "内容",
+      "browser": "ブラウザ",
+      "company": "会社",
+      "console_version": "コンソールのバージョン",
+      "context": "送信環境",
+      "files": "添付ファイル",
+      "follow": "追加の意見",
+      "history": "状態の履歴",
+      "kind": "種類",
+      "no_company": "なし",
+      "path": "送信した画面",
+      "replies": "回答と追加の意見",
+      "sender": "送信者",
+      "sent_at": "送信日時",
+      "state": "状態",
+      "title": "タイトル",
+      "unread": "未読"
+    },
+    "hint": {
+      "body": "Markdown · {max} 文字以内",
+      "files": "{count} 件まで、1 ファイル {size} まで",
+      "title": "{max} 文字以内"
+    },
+    "aria": {
+      "answer_by": "{name} の回答",
+      "download": "{name} をダウンロード",
+      "follow_by": "{name} の追加の意見",
+      "open_picture": "{name} を拡大表示",
+      "state_control": "状態を変更",
+      "toolbar": "お客様の声のツールバー"
+    },
+    "status": {
+      "list_loading": "意見を読み込んでいます…",
+      "report_loading": "意見を読み込んでいます…"
+    },
+    "message": {
+      "answer_failed": "回答を送信できませんでした。",
+      "answered": "回答しました。",
+      "empty_file": "{name} は空のファイルです。",
+      "file_too_large": "{name} は {size} を超えているため添付できません。",
+      "follow_failed": "追加の意見を送信できませんでした。",
+      "followed": "追加の意見を送信しました。",
+      "inbox_empty": "届いた意見はありません。",
+      "inbox_no_match": "条件に合う意見はありません。",
+      "no_replies": "まだ回答はありません。",
+      "read_failed": "お客様の声を読み込めませんでした。",
+      "send_failed": "意見を送信できませんでした。",
+      "sender_empty": "送信した意見はありません。",
+      "sent": "意見を送信しました。",
+      "state_changed": "状態を変更しました。",
+      "state_failed": "状態を変更できませんでした。",
+      "too_many_files": "添付できるファイルは {count} 件までです。",
+      "unreachable": "お客様の声サービスに接続できませんでした。"
+    },
+    "notice": {
+      "report": {
+        "received": {
+          "title": "新しい意見が届きました",
+          "body": "{title}"
+        },
+        "answered": {
+          "title": "送信した意見に回答がありました",
+          "body": "{title}"
+        },
+        "followed": {
+          "title": "追加の意見が届きました",
+          "body": "{title}"
+        }
+      }
+    },
+    "code": {
+      "bad-request": "入力された値が正しくありません。",
+      "unauthorized": "ログインが必要です。",
+      "forbidden": "権限がありません。",
+      "no-route": "お客様の声サービスにこのルートはありません。",
+      "not-found": "この意見は見つかりません。",
+      "conflict": "現在の状態ではこの操作はできません。",
+      "gone": "以前の変更はもう保持されていません。再読み込みしてください。",
+      "failed": "お客様の声サービスでエラーが発生しました。",
+      "upstream-failed": "アカウントサービスが応答しなかったため、処理されませんでした。",
+      "not-ready": "お客様の声サービスはまだ準備ができていません。",
+      "maker-side": "管理者は意見を送信できません。",
+      "sender-side": "この操作は管理者のみ行えます。",
+      "bad-report": "タイトル、内容、ファイル名の長さを確認してください。",
+      "too-many-files": "添付できるファイル数を超えています。",
+      "file-too-large": "ファイルが大きすぎるか、空のファイルがあります。"
+    }
+  }
+}
