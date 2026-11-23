@@ -1,0 +1,62 @@
+# How the testbed tests, checks, builds and deploys this repository, in the testbed's declaration format.
+
+testbed = 0
+name = "bmo-voc"
+
+[test]
+# The Cargo package at the root with its one harness, and the console bundle under client/, whose check script
+# installs its locked packages, typechecks it and runs its tests.
+languages = ["cargo", "bun"]
+
+# The console bundle under client/ is a project of its own: its manifest and lockfile stand in its own folder.
+[projects]
+paths = ["client"]
+
+[check]
+# The sweeps that read the tree before anything runs: the README's folder table, the dependencies the manifests
+# name, the build profiles and the shared versions. The base libraries are bmo-chat's console face, taken by path,
+# and the layer's pinned release, vendored under client/vendor.
+quick = ["layout", "dependencies", "cargo-profile", "shared-versions"]
+base_libraries = ["bmo-console-face", "bmo-ui"]
+
+# The repository whose root holds the shared versions the manifests and the lock hold to.
+[check.shared_versions]
+repository = "bmo-chat"
+
+# No static step is declared for the service. The testbed's own Cargo workspace check formats and lints the crate,
+# every target compiled, through its Cargo verb in the shared build directory, wherever a change marks it, and the
+# change check compiles it; a change that marks none has no Rust to judge.
+
+[build]
+# The service's binary.
+binaries = ["bmo-voc"]
+
+# The service's own deploy tree, and the data root its settings stand under: the data root's env/voc.toml, which
+# each release links to as settings.local.toml, the file the service reads beside settings.toml (docs/api.md,
+# 「Settings」).
+[deploy]
+root = "~/.local/share/bmo-voc"
+link = "deploy"
+data_root = "~/.local/share/bmo/data"
+env_links = [{ link = "settings.local.toml", target = "env/voc.toml" }]
+# The service's user unit, marked bot: the repository's one service, whose health the deployment waits on.
+units = ["deploy/*.service"]
+# Answers 0 once the service the deployed settings name answers ready (docs/api.md, 「Health」).
+health = "~/.local/share/bmo-voc/deploy/bin/bmo-voc health"
+
+# The customers' voice screen the service brings to a console, whose face the deployment probes once the service is up:
+# how a console reaches it, printed from the release's settings (docs/api.md, 「Console」).
+[deploy.console]
+reach = "bin/bmo-voc console-reach"
+
+# The console bundle the service serves from the release (docs/api.md, 「Console」): its locked packages installed
+# and its folder built inside client/, where the settings' console.folder reads it.
+[[deploy.step]]
+id = "console-bundle"
+phase = "before-flip"
+command = '''
+set -eu
+cd client
+bun install --frozen-lockfile
+bun run bundle
+'''

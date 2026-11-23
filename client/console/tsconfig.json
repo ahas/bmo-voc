@@ -1,0 +1,6 @@
+{
+  // The served bundle's entry, read as the layer's pages are. The build's own configuration is run, not
+  // read: `bun run bundle` is its check.
+  "extends": "../.nuxt/tsconfig.app.json",
+  "include": ["../.nuxt/nuxt.d.ts", "./routes.ts", "./page-meta.ts"]
+}

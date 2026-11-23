@@ -1,0 +1,37 @@
+# The voc service's settings (docs/api.md, 「Settings」). A deployment's settings.local.toml overrides any key here,
+# and BMO_VOC_<TABLE>__<KEY> in the environment overrides both.
+
+[server]
+# Where the service answers, as host:port.
+listen = "127.0.0.1:13134"
+# The service token a reader of everything presents. A deployment names its own; empty lets no such reader in.
+token = ""
+# The data root whose env/ the account service's address and token are read from; the deployment's conventional
+# one under the home where empty.
+data_root = ""
+
+# The console bundle the service serves (docs/api.md, 「Console」).
+[console]
+# The console's credential; empty, no console face stands.
+token = ""
+# The bundle's built folder, which the browser bundle's build writes; a relative one is read from where the
+# process starts, a deployment's release. One that cannot be served leaves no console face.
+folder = "client/dist"
+
+[store]
+# The SQLite file of reports, their states, replies and read marks; a relative one is read from where the process
+# starts.
+path = "voc.db"
+# The folder of the attachments' bytes; a relative one is read from where the process starts.
+files = "files"
+
+# What one report may carry (docs/api.md, 「Reports」).
+[attachments]
+max_files = 5
+max_bytes = 10485760
+
+# The account service, read for a person's name and company: its base address and token where the data root's
+# env/web.toml is not to be read (empty, the file is read).
+[accounts]
+address = ""
+token = ""

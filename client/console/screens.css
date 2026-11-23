@@ -1,0 +1,78 @@
+/* The bundle's stylesheet: the utility classes its pages use, in the layer's cascade layers. The layer's
+   stylesheet is referenced and not emitted, so its tokens stand behind each utility as the value of the
+   console's own variable where the console sets one; the console's copy of the layer draws the rest. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@reference "bmo-ui/app/assets/css/main.css";
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@source "../app";
+@source not "../node_modules";
+@source not "../.nuxt";
+
+/* A body a person wrote in markdown (`app/components/voc/MarkdownBody.vue`): the layer styles its fenced blocks, and
+   these its own words, lists, quotes, tables and pictures, in the layer's tokens. */
+.voc-markdown > * + * {
+  margin-top: 0.75rem;
+}
+
+.voc-markdown :is(h1, h2, h3, h4, h5, h6) {
+  font-weight: 600;
+  color: var(--ui-text-highlighted);
+}
+
+.voc-markdown h1 {
+  font-size: 1.25rem;
+}
+
+.voc-markdown h2 {
+  font-size: 1.125rem;
+}
+
+.voc-markdown :is(ul, ol) {
+  padding-inline-start: 1.5rem;
+}
+
+.voc-markdown ul {
+  list-style: disc;
+}
+
+.voc-markdown ol {
+  list-style: decimal;
+}
+
+.voc-markdown a {
+  color: var(--ui-primary);
+  text-decoration: underline;
+}
+
+.voc-markdown blockquote {
+  border-inline-start: 4px solid var(--ui-border-accented);
+  padding-inline-start: 0.75rem;
+  color: var(--ui-text-muted);
+}
+
+.voc-markdown :not(pre) > code {
+  border-radius: var(--ui-radius);
+  background: var(--ui-bg-elevated);
+  padding: 0 0.25rem;
+}
+
+.voc-markdown table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.voc-markdown :is(th, td) {
+  border: 1px solid var(--ui-border);
+  padding: 0.25rem 0.5rem;
+  min-width: 4rem;
+  word-break: keep-all;
+}
+
+.voc-markdown img {
+  display: block;
+  max-width: 100%;
+  margin-inline: auto;
+}

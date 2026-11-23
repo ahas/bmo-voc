@@ -1,0 +1,25 @@
+{
+  "name": "voc",
+  "title": "voc.title",
+  "icon": "i-material-symbols-campaign-outline",
+  "screenPath": "/voc",
+  "serviceName": "voc",
+  "apiPrefix": "/",
+  "role": "member",
+  "ownerKey": true,
+  "sidebarSection": "account",
+  "sidebarSections": { "administrator": "administration" },
+  "events": true,
+  "pushKinds": ["report.received", "report.answered", "report.followed"],
+  "pushPlaces": {
+    "report.received": "/voc/{reportId}",
+    "report.answered": "/voc/{reportId}",
+    "report.followed": "/voc/{reportId}"
+  },
+  "pushReaders": {
+    "report.received": { "role": "administrator" },
+    "report.answered": { "field": "sender" },
+    "report.followed": { "role": "administrator" }
+  },
+  "sidebarUnread": { "path": "/unread", "field": "count" }
+}

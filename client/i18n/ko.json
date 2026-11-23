@@ -1,0 +1,124 @@
+{
+  "voc": {
+    "title": "고객의 소리",
+    "kind": {
+      "bug": "버그",
+      "suggestion": "건의"
+    },
+    "state": {
+      "received": "접수",
+      "under-review": "검토 중",
+      "done": "완료",
+      "declined": "반려"
+    },
+    "side": {
+      "maker": "관리자",
+      "sender": "보낸 사람",
+      "reader": "읽기 전용"
+    },
+    "action": {
+      "answer": "답변",
+      "attach": "파일 첨부",
+      "back": "뒤로",
+      "filter": "필터",
+      "follow": "추가 의견 보내기",
+      "load_more": "더 보기",
+      "new_report": "새 의견 보내기",
+      "refresh": "새로고침",
+      "remove_file": "{name} 삭제",
+      "send": "보내기"
+    },
+    "label": {
+      "all_companies": "모든 회사",
+      "all_kinds": "모든 종류",
+      "all_states": "모든 상태",
+      "answer": "답변",
+      "body": "내용",
+      "browser": "브라우저",
+      "company": "회사",
+      "console_version": "콘솔 버전",
+      "context": "보낸 환경",
+      "files": "첨부 파일",
+      "follow": "추가 의견",
+      "history": "상태 이력",
+      "kind": "종류",
+      "no_company": "없음",
+      "path": "보낸 화면",
+      "replies": "답변과 추가 의견",
+      "sender": "보낸 사람",
+      "sent_at": "보낸 시간",
+      "state": "상태",
+      "title": "제목",
+      "unread": "읽지 않음"
+    },
+    "hint": {
+      "body": "마크다운 · {max}자 이내",
+      "files": "{count}개까지, 한 파일에 {size}까지",
+      "title": "{max}자 이내"
+    },
+    "aria": {
+      "answer_by": "{name}의 답변",
+      "download": "{name} 다운로드",
+      "follow_by": "{name}의 추가 의견",
+      "open_picture": "{name} 크게 보기",
+      "state_control": "상태 변경",
+      "toolbar": "고객의 소리 툴바"
+    },
+    "status": {
+      "list_loading": "의견 불러오는 중…",
+      "report_loading": "의견 불러오는 중…"
+    },
+    "message": {
+      "answer_failed": "답변하지 못했습니다.",
+      "answered": "답변했습니다.",
+      "empty_file": "{name} 파일이 비어 있습니다.",
+      "file_too_large": "{name} 파일이 {size}보다 커서 첨부할 수 없습니다.",
+      "follow_failed": "추가 의견을 보내지 못했습니다.",
+      "followed": "추가 의견을 보냈습니다.",
+      "inbox_empty": "받은 의견이 없습니다.",
+      "inbox_no_match": "조건에 맞는 의견이 없습니다.",
+      "no_replies": "답변이 없습니다.",
+      "read_failed": "고객의 소리를 불러오지 못했습니다.",
+      "send_failed": "의견을 보내지 못했습니다.",
+      "sender_empty": "보낸 의견이 없습니다.",
+      "sent": "의견을 보냈습니다.",
+      "state_changed": "상태를 변경했습니다.",
+      "state_failed": "상태를 변경하지 못했습니다.",
+      "too_many_files": "파일은 {count}개까지 첨부할 수 있습니다.",
+      "unreachable": "고객의 소리 서비스에 연결되지 않았습니다."
+    },
+    "notice": {
+      "report": {
+        "received": {
+          "title": "새 의견이 접수되었습니다",
+          "body": "{title}"
+        },
+        "answered": {
+          "title": "보낸 의견에 답변이 왔습니다",
+          "body": "{title}"
+        },
+        "followed": {
+          "title": "추가 의견이 왔습니다",
+          "body": "{title}"
+        }
+      }
+    },
+    "code": {
+      "bad-request": "입력한 값이 올바르지 않습니다.",
+      "unauthorized": "로그인이 필요합니다.",
+      "forbidden": "권한이 없습니다.",
+      "no-route": "고객의 소리 서비스를 찾을 수 없습니다.",
+      "not-found": "찾을 수 없는 의견입니다.",
+      "conflict": "지금 상태에서는 할 수 없습니다.",
+      "gone": "지난 변경을 더 받을 수 없어 다시 불러와야 합니다.",
+      "failed": "고객의 소리 서비스에서 오류가 났습니다.",
+      "upstream-failed": "계정 서비스가 응답하지 않아 처리하지 못했습니다.",
+      "not-ready": "고객의 소리 서비스가 아직 준비되지 않았습니다.",
+      "maker-side": "관리자는 의견을 보낼 수 없습니다.",
+      "sender-side": "관리자만 할 수 있습니다.",
+      "bad-report": "제목, 내용과 파일 이름의 길이를 확인해 주세요.",
+      "too-many-files": "첨부할 수 있는 파일 수를 넘었습니다.",
+      "file-too-large": "첨부할 수 있는 크기를 넘었거나 빈 파일이 있습니다."
+    }
+  }
+}

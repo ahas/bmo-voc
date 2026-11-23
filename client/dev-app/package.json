@@ -1,0 +1,9 @@
+{
+  "name": "bmo-voc-dev-app",
+  "version": "0.1.0-rev.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev --port 3414"
+  }
+}

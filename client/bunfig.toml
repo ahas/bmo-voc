@@ -1,0 +1,4 @@
+# The console bundle's own bun configuration. Its presence makes `client/` the folder the testbed runs the
+# bundle's test files from, the browser test among them, so they resolve the bundle's own packages.
+# The project's check leaves `tests/browser/` to the suite's browser lane (docs/design.md, 「What the screen
+# shows」).

@@ -1,0 +1,79 @@
+# The voc service, one package: the customers' voice box, the reports they send the platform's maker and the
+# maker's answers (docs/design.md). The console face is bmo-chat's bmo-console-face (docs/design.md, 「The
+# console」). Each registry crate's line is the one bmo-chat's shared-versions.toml lists, where it lists it.
+[package]
+name = "bmo-voc"
+description = "The customers' voice box: the bug reports and suggestions people send the platform's maker, and where the maker reads, judges and answers them."
+version = "0.1.0-rev.1"
+edition = "2024"
+license = "MIT"
+publish = false
+# One test target, the harness at tests/main.rs (bmo-chat's docs/conventions.md, 「Rust builds」).
+autotests = false
+
+[lib]
+test = false
+
+[[bin]]
+name = "bmo-voc"
+path = "src/main.rs"
+test = false
+
+[dependencies]
+# The routes the service answers on, a report's files read as multipart form data.
+axum = { version = "0.8.9", features = ["macros", "multipart", "ws"] }
+# The console face: the manifest, the bundle's files and their guard, by bmo-ui's console plugin contract.
+bmo-console-face = { path = "../../base/chat/console-face" }
+# The binary's command line.
+clap = { version = "4.6.7", features = ["derive", "env"] }
+# The settings: the built-in defaults, the deployment's files and the environment, layered in that order.
+config = { version = "0.15", default-features = false, features = ["toml"] }
+# The service's own event stream, handed out as it comes.
+futures-util = "0.3.34"
+# An attachment's file name written into the header that hands it as a download.
+percent-encoding = "2.3.2"
+# The calls to the account service.
+reqwest = { version = "0.13.5", features = ["json", "query", "stream"] }
+# The reports, their attachments' names, their states, replies and read marks, one SQLite file: this unit's own
+# store.
+rusqlite = { version = "0.32.1", features = ["bundled"] }
+# The JSON Schemas of the wire types, for the OpenAPI document.
+schemars = "1.2.3"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+tokio = { version = "1.53.3", features = ["fs", "io-std", "io-util", "macros", "net", "process", "rt", "rt-multi-thread", "signal", "sync", "test-util", "time"] }
+# The account service's settings file under the data root, `env/web.toml`.
+toml = { version = "0.8.23", default-features = false, features = ["parse"] }
+
+[dev-dependencies]
+# The README's folder table, read by the repository's checks.
+pulldown-cmark = { version = "0.13.6", default-features = false }
+# The personal-data forms the repository's check reads.
+regex = "1.13.1"
+# The service's unit file, read in its INI shape by the repository's checks.
+rust-ini = "0.21"
+
+[[test]]
+name = "main"
+path = "tests/main.rs"
+
+# Build output kept small: line tables alone for a backtrace, split out, and no incremental cache.
+[profile.dev]
+debug = "line-tables-only"
+split-debuginfo = "unpacked"
+incremental = false
+
+[profile.dev.package."*"]
+debug = false
+
+[profile.test]
+debug = "line-tables-only"
+strip = "debuginfo"
+incremental = false
+
+[profile.test.package."*"]
+debug = false
+
+[profile.release]
+debug = false
+strip = "debuginfo"

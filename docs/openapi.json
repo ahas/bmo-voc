@@ -1,0 +1,1875 @@
+{
+  "components": {
+    "schemas": {
+      "Attachment": {
+        "description": "One attachment of a report.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "description": "The file name the sender's browser gave it.",
+            "type": "string"
+          },
+          "size": {
+            "description": "In bytes.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "type": {
+            "description": "The type the sender's browser gave it, `application/octet-stream` where it gave none.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "size"
+        ],
+        "type": "object"
+      },
+      "Company": {
+        "description": "A company as the account service named it as a report was sent.",
+        "properties": {
+          "id": {
+            "description": "The account service's unit id.",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "Context": {
+        "description": "Where a report was sent from, as the sender's console read it; each empty where it read none.",
+        "properties": {
+          "browser": {
+            "default": "",
+            "description": "The browser the console runs in.",
+            "type": "string"
+          },
+          "consoleVersion": {
+            "default": "",
+            "description": "The console's version.",
+            "type": "string"
+          },
+          "path": {
+            "default": "",
+            "description": "The console screen's path the sender came from.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "consoleVersion",
+          "browser"
+        ],
+        "type": "object"
+      },
+      "Health": {
+        "description": "`GET /health`.",
+        "properties": {
+          "ready": {
+            "type": "boolean"
+          },
+          "reason": {
+            "description": "Null when ready.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ready",
+          "reason",
+          "version"
+        ],
+        "type": "object"
+      },
+      "Kind": {
+        "description": "What a report is (`docs/design.md`, 「A report」).",
+        "oneOf": [
+          {
+            "const": "bug",
+            "description": "A fault the sender met.",
+            "type": "string"
+          },
+          {
+            "const": "suggestion",
+            "description": "Something the sender wants changed or added.",
+            "type": "string"
+          }
+        ]
+      },
+      "Me": {
+        "description": "`GET /me`.",
+        "properties": {
+          "side": {
+            "$ref": "#/components/schemas/Side"
+          },
+          "user": {
+            "description": "The account service's user id; null for a reader of everything.",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "user",
+          "side"
+        ],
+        "type": "object"
+      },
+      "NewReply": {
+        "description": "`POST /reports/{reportId}/replies`.",
+        "properties": {
+          "body": {
+            "description": "Markdown, 1 to 20,000 characters.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "body"
+        ],
+        "type": "object"
+      },
+      "NewReport": {
+        "description": "The `report` part of `POST /reports`.",
+        "properties": {
+          "body": {
+            "description": "Markdown, 1 to 20,000 characters.",
+            "type": "string"
+          },
+          "context": {
+            "$ref": "#/components/schemas/Context",
+            "default": {
+              "browser": "",
+              "consoleVersion": "",
+              "path": ""
+            }
+          },
+          "kind": {
+            "description": "`bug` or `suggestion`.",
+            "type": "string"
+          },
+          "title": {
+            "description": "1 to 200 characters once trimmed.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "title",
+          "body",
+          "context"
+        ],
+        "type": "object"
+      },
+      "Page": {
+        "description": "A page of members.",
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReportSummary"
+            },
+            "type": "array"
+          },
+          "more": {
+            "description": "Whether anything stands past the last item.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "items",
+          "more"
+        ],
+        "type": "object"
+      },
+      "Page2": {
+        "description": "A page of members.",
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Company"
+            },
+            "type": "array"
+          },
+          "more": {
+            "description": "Whether anything stands past the last item.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "items",
+          "more"
+        ],
+        "type": "object"
+      },
+      "Page3": {
+        "description": "A page of members.",
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/StreamEvent"
+            },
+            "type": "array"
+          },
+          "more": {
+            "description": "Whether anything stands past the last item.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "items",
+          "more"
+        ],
+        "type": "object"
+      },
+      "Person": {
+        "description": "Who sent a report, as the account service named them as it was sent.",
+        "properties": {
+          "name": {
+            "description": "Their full name, else their login where no full name stands.",
+            "type": "string"
+          },
+          "user": {
+            "description": "The account service's user id.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user",
+          "name"
+        ],
+        "type": "object"
+      },
+      "Reply": {
+        "description": "One reply on a report.",
+        "properties": {
+          "at": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "body": {
+            "description": "Markdown.",
+            "type": "string"
+          },
+          "by": {
+            "$ref": "#/components/schemas/Person"
+          },
+          "id": {
+            "type": "string"
+          },
+          "side": {
+            "$ref": "#/components/schemas/Side"
+          }
+        },
+        "required": [
+          "id",
+          "side",
+          "by",
+          "body",
+          "at"
+        ],
+        "type": "object"
+      },
+      "Report": {
+        "description": "One report whole.",
+        "properties": {
+          "activityAt": {
+            "description": "Its latest act of either side: its arrival, a reply or a state change.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "attachments": {
+            "items": {
+              "$ref": "#/components/schemas/Attachment"
+            },
+            "type": "array"
+          },
+          "body": {
+            "description": "Markdown.",
+            "type": "string"
+          },
+          "company": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Company"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null where the sender stood in no company."
+          },
+          "context": {
+            "$ref": "#/components/schemas/Context"
+          },
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/Kind"
+          },
+          "replies": {
+            "description": "Oldest first.",
+            "items": {
+              "$ref": "#/components/schemas/Reply"
+            },
+            "type": "array"
+          },
+          "sender": {
+            "$ref": "#/components/schemas/Person"
+          },
+          "sentAt": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "state": {
+            "$ref": "#/components/schemas/State"
+          },
+          "states": {
+            "description": "Oldest first, the arrival first.",
+            "items": {
+              "$ref": "#/components/schemas/StateEntry"
+            },
+            "type": "array"
+          },
+          "title": {
+            "type": "string"
+          },
+          "unread": {
+            "description": "Whether it is unread by the caller's side; false for a reader of everything.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "state",
+          "sender",
+          "company",
+          "sentAt",
+          "activityAt",
+          "unread",
+          "body",
+          "context",
+          "attachments",
+          "states",
+          "replies"
+        ],
+        "type": "object"
+      },
+      "ReportChanged": {
+        "description": "`report.changed`.",
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/Kind"
+          },
+          "reportId": {
+            "type": "string"
+          },
+          "sender": {
+            "description": "The sender's user id.",
+            "type": "string"
+          },
+          "state": {
+            "$ref": "#/components/schemas/State",
+            "description": "The state it moved to."
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "reportId",
+          "sender",
+          "title",
+          "kind",
+          "state"
+        ],
+        "type": "object"
+      },
+      "ReportEvent": {
+        "description": "`report.received`, `report.answered` and `report.followed`.",
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/Kind"
+          },
+          "reportId": {
+            "type": "string"
+          },
+          "sender": {
+            "description": "The sender's user id.",
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "reportId",
+          "sender",
+          "title",
+          "kind"
+        ],
+        "type": "object"
+      },
+      "ReportSummary": {
+        "description": "One report as a list holds it.",
+        "properties": {
+          "activityAt": {
+            "description": "Its latest act of either side: its arrival, a reply or a state change.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "company": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Company"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null where the sender stood in no company."
+          },
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/Kind"
+          },
+          "replies": {
+            "description": "How many replies it holds.",
+            "format": "int64",
+            "type": "integer"
+          },
+          "sender": {
+            "$ref": "#/components/schemas/Person"
+          },
+          "sentAt": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "state": {
+            "$ref": "#/components/schemas/State"
+          },
+          "title": {
+            "type": "string"
+          },
+          "unread": {
+            "description": "Whether it is unread by the caller's side; false for a reader of everything.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "state",
+          "sender",
+          "company",
+          "sentAt",
+          "activityAt",
+          "replies",
+          "unread"
+        ],
+        "type": "object"
+      },
+      "Side": {
+        "description": "The side a reader stands on (`docs/design.md`, 「The two sides」).",
+        "oneOf": [
+          {
+            "const": "maker",
+            "description": "The platform administrators: they read every report, move its state and answer it.",
+            "type": "string"
+          },
+          {
+            "const": "sender",
+            "description": "A person who is not a platform administrator: they send reports and read their own.",
+            "type": "string"
+          },
+          {
+            "const": "reader",
+            "description": "The service token alone: it reads every report and writes nothing.",
+            "type": "string"
+          }
+        ]
+      },
+      "State": {
+        "description": "The maker's judgement of a report (`docs/design.md`, 「Its state」).",
+        "oneOf": [
+          {
+            "const": "received",
+            "description": "As it arrives.",
+            "type": "string"
+          },
+          {
+            "const": "under-review",
+            "description": "While the maker looks into it.",
+            "type": "string"
+          },
+          {
+            "const": "done",
+            "description": "Answered or carried out.",
+            "type": "string"
+          },
+          {
+            "const": "declined",
+            "description": "Not to be carried out.",
+            "type": "string"
+          }
+        ]
+      },
+      "StateEntry": {
+        "description": "One entry of a report's state history.",
+        "properties": {
+          "at": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "by": {
+            "$ref": "#/components/schemas/Writer"
+          },
+          "state": {
+            "$ref": "#/components/schemas/State"
+          }
+        },
+        "required": [
+          "state",
+          "by",
+          "at"
+        ],
+        "type": "object"
+      },
+      "StateWrite": {
+        "description": "`PUT /reports/{reportId}/state`.",
+        "properties": {
+          "state": {
+            "description": "`received`, `under-review`, `done` or `declined`.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "state"
+        ],
+        "type": "object"
+      },
+      "StreamEvent": {
+        "description": "One event the service publishes.",
+        "properties": {
+          "at": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "data": true,
+          "id": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "kind": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "at",
+          "data"
+        ],
+        "type": "object"
+      },
+      "Unread": {
+        "description": "`GET /unread`.",
+        "properties": {
+          "count": {
+            "description": "The reports unread by the caller's side; 0 for a reader of everything.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "count"
+        ],
+        "type": "object"
+      },
+      "WireError": {
+        "description": "A failure.",
+        "properties": {
+          "code": {
+            "description": "kebab-case.",
+            "type": "string"
+          },
+          "error": {
+            "description": "An English sentence.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "error"
+        ],
+        "type": "object"
+      },
+      "Writer": {
+        "description": "Who wrote an entry of a report's history.",
+        "properties": {
+          "name": {
+            "description": "As the account service named them as the entry was written.",
+            "type": "string"
+          },
+          "side": {
+            "$ref": "#/components/schemas/Side"
+          },
+          "user": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user",
+          "name",
+          "side"
+        ],
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "description": "The service token alone, a reader of everything that writes nothing, or the console's credential with Owner-Key and Owner-Role; the console bundle's routes take the console's credential alone.",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "description": "The platform's customers' voice box. A person who uses the platform sends its maker a bug report or a suggestion, with screenshots and other files; the platform administrators, the maker's side, read every report of every company, move it through its states and answer it, and the sender answers back on the same report. It keeps the reports, their attachments, their state histories, their replies and each side's read mark in its own store, and reads the account service for each writer's name and a sender's company. Bodies are JSON with camelCase keys, but a report sent, which is multipart form data; times are epoch milliseconds, ids are strings, lists are pages of items and more, and every failure is the error shape with its status.",
+    "title": "bmo-voc",
+    "version": "0.1.0-rev.1"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/companies": {
+      "get": {
+        "operationId": "listCompanies",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page2"
+                }
+              }
+            },
+            "description": "Answered."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this\n`sender-side`: a state moved, or the companies read, by a sender"
+          }
+        },
+        "summary": "The companies the reports were sent from, each named as the latest report from it names it, by name; the maker and a reader of everything alone.",
+        "tags": [
+          "reports"
+        ],
+        "x-codes": [
+          "unauthorized",
+          "forbidden",
+          "sender-side"
+        ]
+      }
+    },
+    "/console-manifest": {
+      "get": {
+        "operationId": "readConsoleManifest",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Answered."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`no-route`: no route answers this method and path"
+          }
+        },
+        "summary": "The console face's manifest, by bmo-ui's console plugin contract, to the console's credential alone.",
+        "tags": [
+          "console"
+        ],
+        "x-codes": [
+          "unauthorized",
+          "forbidden",
+          "no-route"
+        ]
+      }
+    },
+    "/console/{file}": {
+      "get": {
+        "operationId": "readConsoleFile",
+        "parameters": [
+          {
+            "description": "The file's name, as the manifest gives it.",
+            "in": "path",
+            "name": "file",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Answered."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`no-route`: no route answers this method and path\n`not-found`: nothing the caller reads stands at what the path names"
+          }
+        },
+        "summary": "A file of the console bundle at the path the manifest names: the words to the console's credential alone, the module, the stylesheet and every other file to it with the manifest's Owner-Role and Owner-Key.",
+        "tags": [
+          "console"
+        ],
+        "x-codes": [
+          "unauthorized",
+          "forbidden",
+          "no-route",
+          "not-found"
+        ]
+      }
+    },
+    "/events": {
+      "get": {
+        "operationId": "readEvents",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "after",
+            "required": true,
+            "schema": {
+              "default": null,
+              "format": "int64",
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          {
+            "description": "The kinds, comma-separated.",
+            "in": "query",
+            "name": "kinds",
+            "required": true,
+            "schema": {
+              "default": null,
+              "description": "The kinds, comma-separated.",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "description": "The most events a page holds, 50 where none is given, at most 200.",
+            "in": "query",
+            "name": "limit",
+            "required": true,
+            "schema": {
+              "default": null,
+              "description": "The most events a page holds, 50 where none is given, at most 200.",
+              "format": "int64",
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          {
+            "description": "The last event number seen, as a reconnecting stream sends it.",
+            "in": "header",
+            "name": "Last-Event-ID",
+            "required": false,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page3"
+                }
+              },
+              "text/event-stream": {
+                "schema": {
+                  "description": "Each event's data is a StreamEvent.",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Answered."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`bad-request`: the body, the path or the query is not the shape the route takes"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`gone`: a resume from before the events the service keeps"
+          }
+        },
+        "summary": "The events the voc unit publishes, as a server-sent stream, or a page to Accept: application/json: every one to the maker and a reader of everything, a sender's own reports' alone to a sender.",
+        "tags": [
+          "events-stream"
+        ],
+        "x-codes": [
+          "bad-request",
+          "unauthorized",
+          "forbidden",
+          "gone"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "readHealth",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Answered."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this"
+          }
+        },
+        "summary": "Whether the service is ready, and its version.",
+        "tags": [
+          "health"
+        ],
+        "x-codes": [
+          "unauthorized",
+          "forbidden"
+        ]
+      }
+    },
+    "/me": {
+      "get": {
+        "operationId": "readMe",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            },
+            "description": "Answered."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this"
+          }
+        },
+        "summary": "The reader: their user, and their side, the maker, a sender or a reader of everything.",
+        "tags": [
+          "reader"
+        ],
+        "x-codes": [
+          "unauthorized",
+          "forbidden"
+        ]
+      }
+    },
+    "/reports": {
+      "get": {
+        "operationId": "listReports",
+        "parameters": [
+          {
+            "description": "The number of rows read so far.",
+            "in": "query",
+            "name": "after",
+            "required": true,
+            "schema": {
+              "default": null,
+              "description": "The number of rows read so far.",
+              "format": "int64",
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          {
+            "description": "The company's id alone; the maker and a reader of everything.",
+            "in": "query",
+            "name": "company",
+            "required": true,
+            "schema": {
+              "default": null,
+              "description": "The company's id alone; the maker and a reader of everything.",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "description": "The kind alone; the maker and a reader of everything.",
+            "in": "query",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Kind"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "The kind alone; the maker and a reader of everything."
+            }
+          },
+          {
+            "description": "At most this many, 50 where none is given, never past 200.",
+            "in": "query",
+            "name": "limit",
+            "required": true,
+            "schema": {
+              "default": null,
+              "description": "At most this many, 50 where none is given, never past 200.",
+              "format": "int64",
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          {
+            "description": "The state alone; the maker and a reader of everything.",
+            "in": "query",
+            "name": "state",
+            "required": true,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/State"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "The state alone; the maker and a reader of everything."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page"
+                }
+              }
+            },
+            "description": "Answered."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`bad-request`: the body, the path or the query is not the shape the route takes"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this"
+          }
+        },
+        "summary": "The reports the caller reads, newest activity first: a sender's own alone; the maker and a reader of everything filter by kind, state and company, which a sender's call is answered as if it did not name.",
+        "tags": [
+          "reports"
+        ],
+        "x-codes": [
+          "bad-request",
+          "unauthorized",
+          "forbidden"
+        ]
+      },
+      "post": {
+        "operationId": "sendReport",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "encoding": {
+                "report": {
+                  "contentType": "application/json"
+                }
+              },
+              "schema": {
+                "properties": {
+                  "files": {
+                    "description": "Each attachment, its file name and type as the browser gave them: at most the settings' `[attachments] max_files`, each 1 byte to `[attachments] max_bytes`, its name 1 to 200 characters.",
+                    "items": {
+                      "contentMediaType": "application/octet-stream",
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "report": {
+                    "$ref": "#/components/schemas/NewReport"
+                  }
+                },
+                "required": [
+                  "report"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Report"
+                }
+              }
+            },
+            "description": "Created."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`bad-request`: the body, the path or the query is not the shape the route takes"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this\n`maker-side`: a report sent by the maker"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`too-many-files`: more files than the settings' `[attachments] max_files`\n`file-too-large`: a file past the settings' `[attachments] max_bytes`, or an empty one"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`bad-report`: a report's or a reply's field out of its bounds, an unknown kind or state, or a `report` part missing or not the JSON it names"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`upstream-failed`: the account service failed a read a call needed; nothing of the call is written"
+          }
+        },
+        "summary": "A sender sends a report with its files, whole or not at all; the sender's name and company are read from the account service as it is sent.",
+        "tags": [
+          "reports"
+        ],
+        "x-codes": [
+          "bad-request",
+          "unauthorized",
+          "forbidden",
+          "upstream-failed",
+          "maker-side",
+          "bad-report",
+          "too-many-files",
+          "file-too-large"
+        ]
+      }
+    },
+    "/reports/{reportId}": {
+      "get": {
+        "operationId": "readReport",
+        "parameters": [
+          {
+            "description": "The report's id.",
+            "in": "path",
+            "name": "reportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Report"
+                }
+              }
+            },
+            "description": "Answered."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`bad-request`: the body, the path or the query is not the shape the route takes"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`not-found`: nothing the caller reads stands at what the path names"
+          }
+        },
+        "summary": "One report whole; another sender's is not found.",
+        "tags": [
+          "reports"
+        ],
+        "x-codes": [
+          "bad-request",
+          "unauthorized",
+          "forbidden",
+          "not-found"
+        ]
+      }
+    },
+    "/reports/{reportId}/attachments/{attachmentId}": {
+      "get": {
+        "operationId": "readAttachment",
+        "parameters": [
+          {
+            "description": "The report's id.",
+            "in": "path",
+            "name": "reportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The attachment's id.",
+            "in": "path",
+            "name": "attachmentId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Answered."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`bad-request`: the body, the path or the query is not the shape the route takes"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`not-found`: nothing the caller reads stands at what the path names"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`failed`: the service failed"
+          }
+        },
+        "summary": "An attachment's bytes with its type and file name: a PNG, JPEG, GIF or WebP picture inline, any other file as an attachment to save, every answer with X-Content-Type-Options: nosniff.",
+        "tags": [
+          "reports"
+        ],
+        "x-codes": [
+          "bad-request",
+          "unauthorized",
+          "forbidden",
+          "not-found",
+          "failed"
+        ]
+      }
+    },
+    "/reports/{reportId}/replies": {
+      "post": {
+        "operationId": "replyToReport",
+        "parameters": [
+          {
+            "description": "The report's id.",
+            "in": "path",
+            "name": "reportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewReply"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Reply"
+                }
+              }
+            },
+            "description": "Created."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`bad-request`: the body, the path or the query is not the shape the route takes"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`not-found`: nothing the caller reads stands at what the path names"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`bad-report`: a report's or a reply's field out of its bounds, an unknown kind or state, or a `report` part missing or not the JSON it names"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`upstream-failed`: the account service failed a read a call needed; nothing of the call is written"
+          }
+        },
+        "summary": "A reply from the caller's side, the writer's name read from the account service; it moves no state.",
+        "tags": [
+          "reports"
+        ],
+        "x-codes": [
+          "bad-request",
+          "unauthorized",
+          "forbidden",
+          "not-found",
+          "upstream-failed",
+          "bad-report"
+        ]
+      }
+    },
+    "/reports/{reportId}/seen": {
+      "put": {
+        "operationId": "markReportSeen",
+        "parameters": [
+          {
+            "description": "The report's id.",
+            "in": "path",
+            "name": "reportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Done; no content."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`bad-request`: the body, the path or the query is not the shape the route takes"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`not-found`: nothing the caller reads stands at what the path names"
+          }
+        },
+        "summary": "The caller's side's read mark on the report set to now.",
+        "tags": [
+          "reports"
+        ],
+        "x-codes": [
+          "bad-request",
+          "unauthorized",
+          "forbidden",
+          "not-found"
+        ]
+      }
+    },
+    "/reports/{reportId}/state": {
+      "put": {
+        "operationId": "moveReportState",
+        "parameters": [
+          {
+            "description": "The report's id.",
+            "in": "path",
+            "name": "reportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StateWrite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Report"
+                }
+              }
+            },
+            "description": "Answered."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`bad-request`: the body, the path or the query is not the shape the route takes"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this\n`sender-side`: a state moved, or the companies read, by a sender"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`not-found`: nothing the caller reads stands at what the path names"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`bad-report`: a report's or a reply's field out of its bounds, an unknown kind or state, or a `report` part missing or not the JSON it names"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`upstream-failed`: the account service failed a read a call needed; nothing of the call is written"
+          }
+        },
+        "summary": "The maker moves the report to a state, the writer's name read from the account service; the state it already stands in changes nothing and keeps no entry.",
+        "tags": [
+          "reports"
+        ],
+        "x-codes": [
+          "bad-request",
+          "unauthorized",
+          "forbidden",
+          "not-found",
+          "upstream-failed",
+          "sender-side",
+          "bad-report"
+        ]
+      }
+    },
+    "/unread": {
+      "get": {
+        "operationId": "readUnread",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unread"
+                }
+              }
+            },
+            "description": "Answered."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`unauthorized`: the token is missing or wrong"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WireError"
+                }
+              }
+            },
+            "description": "`forbidden`: the token is right but the caller may not do this"
+          }
+        },
+        "summary": "How many reports are unread by the caller's side; 0 for a reader of everything.",
+        "tags": [
+          "reports"
+        ],
+        "x-codes": [
+          "unauthorized",
+          "forbidden"
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ],
+  "servers": [
+    {
+      "description": "the voc service",
+      "url": "/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "health"
+    },
+    {
+      "name": "reader"
+    },
+    {
+      "name": "reports"
+    },
+    {
+      "name": "events-stream"
+    },
+    {
+      "name": "console"
+    }
+  ],
+  "x-calls": [
+    "the account service"
+  ],
+  "x-event-data": {
+    "report.answered": {
+      "$ref": "#/components/schemas/ReportEvent"
+    },
+    "report.changed": {
+      "$ref": "#/components/schemas/ReportChanged"
+    },
+    "report.followed": {
+      "$ref": "#/components/schemas/ReportEvent"
+    },
+    "report.received": {
+      "$ref": "#/components/schemas/ReportEvent"
+    }
+  },
+  "x-events": [
+    "report.received",
+    "report.answered",
+    "report.followed",
+    "report.changed"
+  ],
+  "x-layer": "downstream"
+}

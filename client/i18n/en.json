@@ -1,0 +1,124 @@
+{
+  "voc": {
+    "title": "Customer voice",
+    "kind": {
+      "bug": "Bug",
+      "suggestion": "Suggestion"
+    },
+    "state": {
+      "received": "Received",
+      "under-review": "Under review",
+      "done": "Done",
+      "declined": "Declined"
+    },
+    "side": {
+      "maker": "Administrator",
+      "sender": "Sender",
+      "reader": "Read only"
+    },
+    "action": {
+      "answer": "Answer",
+      "attach": "Attach files",
+      "back": "Back",
+      "filter": "Filter",
+      "follow": "Send follow-up",
+      "load_more": "Show more",
+      "new_report": "Send new feedback",
+      "refresh": "Refresh",
+      "remove_file": "Remove {name}",
+      "send": "Send"
+    },
+    "label": {
+      "all_companies": "All companies",
+      "all_kinds": "All kinds",
+      "all_states": "All states",
+      "answer": "Answer",
+      "body": "Body",
+      "browser": "Browser",
+      "company": "Company",
+      "console_version": "Console version",
+      "context": "Sent from",
+      "files": "Attachments",
+      "follow": "Follow-up",
+      "history": "State history",
+      "kind": "Kind",
+      "no_company": "None",
+      "path": "Screen",
+      "replies": "Replies",
+      "sender": "Sender",
+      "sent_at": "Sent",
+      "state": "State",
+      "title": "Title",
+      "unread": "Unread"
+    },
+    "hint": {
+      "body": "Markdown · up to {max} characters",
+      "files": "Up to {count} files, {size} each",
+      "title": "Up to {max} characters"
+    },
+    "aria": {
+      "answer_by": "Answer by {name}",
+      "download": "Download {name}",
+      "follow_by": "Follow-up by {name}",
+      "open_picture": "Open {name}",
+      "state_control": "Change state",
+      "toolbar": "Customer voice toolbar"
+    },
+    "status": {
+      "list_loading": "Loading feedback…",
+      "report_loading": "Loading feedback…"
+    },
+    "message": {
+      "answer_failed": "The answer could not be sent.",
+      "answered": "Answered.",
+      "empty_file": "{name} is empty.",
+      "file_too_large": "{name} is larger than {size} and cannot be attached.",
+      "follow_failed": "The follow-up could not be sent.",
+      "followed": "Follow-up sent.",
+      "inbox_empty": "No feedback has arrived.",
+      "inbox_no_match": "No feedback matches the filters.",
+      "no_replies": "No answers yet.",
+      "read_failed": "Customer voice could not be loaded.",
+      "send_failed": "The feedback could not be sent.",
+      "sender_empty": "You have sent no feedback.",
+      "sent": "Feedback sent.",
+      "state_changed": "State changed.",
+      "state_failed": "The state could not be changed.",
+      "too_many_files": "Up to {count} files can be attached.",
+      "unreachable": "The customer voice service could not be reached."
+    },
+    "notice": {
+      "report": {
+        "received": {
+          "title": "New feedback received",
+          "body": "{title}"
+        },
+        "answered": {
+          "title": "Your feedback was answered",
+          "body": "{title}"
+        },
+        "followed": {
+          "title": "A follow-up arrived",
+          "body": "{title}"
+        }
+      }
+    },
+    "code": {
+      "bad-request": "The values given are not valid.",
+      "unauthorized": "Sign-in is needed.",
+      "forbidden": "You do not have permission.",
+      "no-route": "The customer voice service has no such route.",
+      "not-found": "This feedback cannot be found.",
+      "conflict": "This cannot be done in the current state.",
+      "gone": "Earlier changes are no longer kept; read again.",
+      "failed": "The customer voice service failed.",
+      "upstream-failed": "The account service did not answer, so nothing was done.",
+      "not-ready": "The customer voice service is not ready yet.",
+      "maker-side": "Administrators cannot send feedback.",
+      "sender-side": "Only administrators can do this.",
+      "bad-report": "Check the length of the title, the body and the file names.",
+      "too-many-files": "Too many files are attached.",
+      "file-too-large": "A file is too large or empty."
+    }
+  }
+}

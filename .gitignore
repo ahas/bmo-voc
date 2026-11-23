@@ -1,0 +1,15 @@
+/target
+/node_modules
+/settings.local.toml
+/voc.db
+/voc.db-wal
+/voc.db-shm
+/client/node_modules
+/client/.nuxt
+/client/.output
+/client/.data
+/client/dist
+/client/*.tsbuildinfo
+.graph/*
+!.graph/settings.toml
+/files

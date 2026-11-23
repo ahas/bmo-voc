@@ -1,0 +1,12 @@
+# What the bundle's install, typecheck, build and dev host write, beside what the repository's root ignores.
+/node_modules
+/.nuxt
+/.output
+/.data
+/dist
+/*.tsbuildinfo
+/console/*.tsbuildinfo
+/dev-app/node_modules
+/dev-app/.nuxt
+/dev-app/.output
+/dev-app/dist
