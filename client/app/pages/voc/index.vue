@@ -1,7 +1,7 @@
 <template>
   <!-- The screen's first view (`docs/design.md`, 「The console」): for a sender their own reports with the create
        button that writes a new one, for the maker the inbox of every report, filtered by kind, state and company in
-       the screen's row. Newest activity first, read a page at a time, the next page at the list's end. -->
+       the screen's row. Newest activity first, read a page at a time, the next page read as the list's end comes into view. -->
   <VocFrame id="voc" :refreshing="refreshing" @refresh="refresh">
     <template #default="{ short }">
       <template v-if="maker">
@@ -83,11 +83,14 @@
             <template #sent-cell="{ row }">
               <span class="flex min-h-12 items-center ps-2 pe-4 text-sm tabular-nums">{{ formatDateClock(row.original.sentAt / 1000) }}</span>
             </template>
+            <!-- The next page is read as the table's end comes into view inside its own scroll. -->
+            <template #body-bottom>
+              <NextPageFoot :more="list.more.value" :busy="list.reading.value" :next="list.next" :span="columns.length" :failed-words="failedWords" :loading-label="$t('voc.status.list_loading')" list-class="flex flex-col">
+                <div class="flex min-h-12 items-center ps-3 pe-4"><SkeletonBar class="h-4 w-4/5" /></div>
+              </NextPageFoot>
+            </template>
           </DataTable>
 
-          <div v-if="list.more.value" class="flex shrink-0 justify-center border-t border-default p-2">
-            <UButton color="neutral" variant="ghost" icon="i-material-symbols-expand-more" :label="$t('voc.action.load_more')" :loading="list.loadingMore.value" @click="list.next" />
-          </div>
         </div>
 
         <!-- A sender's reports, and the maker's on a phone: a list of rows, the next page at its end. -->
@@ -112,9 +115,16 @@
               </li>
             </ul>
 
-            <div v-if="list.more.value" class="flex justify-center p-2">
-              <UButton color="neutral" variant="ghost" icon="i-material-symbols-expand-more" :label="$t('voc.action.load_more')" :loading="list.loadingMore.value" @click="list.next" />
-            </div>
+            <NextPageFoot :more="list.more.value" :busy="list.reading.value" :next="list.next" :failed-words="failedWords" :loading-label="$t('voc.status.list_loading')" list-class="flex flex-col">
+              <div class="flex min-h-14 items-center gap-3 border-b border-default py-2 ps-3 pe-4">
+                <SkeletonBar class="size-5 rounded-full" />
+                <SkeletonBar class="size-5 rounded-full" />
+                <div class="flex min-w-0 flex-1 flex-col">
+                  <SkeletonLine size="base" width="w-48" />
+                  <SkeletonLine width="w-32" />
+                </div>
+              </div>
+            </NextPageFoot>
           </template>
         </div>
       </template>
@@ -133,6 +143,7 @@ import CreateButton from "bmo-ui/app/components/CreateButton.vue";
 import DataTable from "bmo-ui/app/components/DataTable.vue";
 import DataTableSkeleton from "bmo-ui/app/components/DataTableSkeleton.vue";
 import IconButton from "bmo-ui/app/components/IconButton.vue";
+import NextPageFoot from "bmo-ui/app/components/NextPageFoot.vue";
 import SkeletonBar from "bmo-ui/app/components/SkeletonBar.vue";
 import SkeletonLine from "bmo-ui/app/components/SkeletonLine.vue";
 import { useNarrow } from "bmo-ui/app/domain/screen";
@@ -185,6 +196,8 @@ const filter = computed<ReportFilter>(() => {
 const filtering = computed(() => Object.values(filter.value).some((value) => value !== undefined));
 
 const list = useReportList(() => filter.value);
+// Why a next page failed, in the words a region says in its own place.
+const failedWords = (error: unknown): string => voc.readWords(error);
 
 const failure = computed(() => voc.meFailure.value ?? list.failure.value);
 

@@ -50,6 +50,8 @@ export interface StandIn {
   asked: Asked[];
   /** Whether the reports' list answers a failure, as a service that broke would. */
   failing: boolean;
+  /** Whether the next page asked past the first is refused, once, with a status the fetcher does not retry. */
+  failNextPage: boolean;
   /** Puts the seeded reports back, the side a sender's and nothing failing. */
   reset: () => void;
   /** Adds as many more reports, from another company's sender. */
@@ -108,6 +110,7 @@ export function standIn(): StandIn {
   function reset(): void {
     service.side = "sender";
     service.failing = false;
+    service.failNextPage = false;
     reports.clear();
     clock = START;
     made = 0;
@@ -131,7 +134,7 @@ export function standIn(): StandIn {
     for (let at = 1; at <= count; at++) store("bug", `Seeded report ${at}`, OTHER_SENDER, SECOND_COMPANY, [], CONTEXT);
   }
 
-  const service: StandIn = { address: "", side: "sender", asked: [], failing: false, reset, seed, stop: () => undefined };
+  const service: StandIn = { address: "", side: "sender", asked: [], failing: false, failNextPage: false, reset, seed, stop: () => undefined };
 
   /** Whether the reader's side has not read what the other side did since it last opened the report. */
   function unread(stored: Stored, side: Side): boolean {
@@ -177,6 +180,12 @@ export function standIn(): StandIn {
 
       const maker = service.side !== "sender";
       const after = Number(url.searchParams.get("after") ?? 0);
+
+      if (after > 0 && service.failNextPage) {
+        service.failNextPage = false;
+
+        return refused(400, "failed");
+      }
       const limit = Math.min(Number(url.searchParams.get("limit") ?? 50), 200);
       const kind = maker ? url.searchParams.get("kind") : null;
       const state = maker ? url.searchParams.get("state") : null;

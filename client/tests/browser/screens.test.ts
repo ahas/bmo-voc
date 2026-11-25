@@ -13,7 +13,8 @@ import type { Host } from "./host";
 // The voc screens as a person reaches them (`docs/design.md`, 「The console」), over the dev host relaying to a
 // stand-in of the service, at a desktop's width and a phone's. A sender reads their own reports, the one the maker
 // answered marked unread until it is opened, sends a report with a file and lands on its thread, and answers the
-// maker's answer with a follow-up; the maker reads every company's reports, filters them by kind, state and company, opens one to read
+// maker's answer with a follow-up; the maker reads every company's reports a page at a time, the next page brought by
+// scrolling alone and a failed page read again from its retry, filters them by kind, state and company, opens one to read
 // where it was sent from and its files, moves its state and answers. At both widths nothing reaches past the screen's
 // edge. What is checked is what is drawn and reachable by role and name. Skipped where the browser build is not on
 // the machine.
@@ -86,6 +87,27 @@ async function sideScroll(page: Page): Promise<boolean> {
 
 /** A report's link in a list, by its title. */
 const reportLink = (page: Page, title: string): Locator => page.getByRole("link", { name: new RegExp(title) });
+
+/** How many reports the list shows: the phone's rows, or the table's rows past its foot. */
+function rowsShown(page: Page): Promise<number> {
+  return page.evaluate(() => document.querySelectorAll("[data-report-row]").length || document.querySelectorAll("tbody tr:not([data-next-page-foot])").length);
+}
+
+/** Turns the wheel over the list's first report, as a reader scrolling to its end does, until what is waited for holds. */
+async function scrollUntil(page: Page, holds: () => Promise<boolean>): Promise<void> {
+  const box = await reportLink(page, "Seeded report 55").boundingBox();
+
+  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+
+  const end = Date.now() + FOLLOWS_MS;
+
+  while (!(await holds())) {
+    if (Date.now() > end) throw new Error(`scrolling the list did not bring it within ${FOLLOWS_MS} ms`);
+
+    await page.mouse.wheel(0, 1200);
+    await page.waitForTimeout(50);
+  }
+}
 
 /** The list's rows' titles, in the order they stand. */
 async function listedTitles(page: Page): Promise<string[]> {
@@ -264,18 +286,41 @@ for (const width of WIDTHS) {
 }
 
 describe.skipIf(!ready)("a long inbox and a failed read", () => {
-  test("the inbox reads a page at a time, the next at its end", async () => {
+  for (const width of WIDTHS) {
+    test(`at ${width.name} width the inbox reads a page at a time, the next by scrolling to its end alone`, async () => {
+      host!.service.reset();
+      host!.service.side = "maker";
+      host!.service.seed(55);
+
+      const page = await opened(width.viewport, "/voc");
+
+      await reportLink(page, "Seeded report 55").waitFor();
+      expect(await rowsShown(page)).toBe(50);
+      // Nothing at the foot is pressed for more.
+      expect(await page.locator("[data-next-page-foot] button").count()).toBe(0);
+
+      await scrollUntil(page, async () => (await rowsShown(page)) === 58);
+      // The last page holds nothing under it.
+      await page.locator("[data-next-page-foot]").waitFor({ state: "detached" });
+    }, TEST_MS);
+  }
+
+  test("a next page that fails keeps the reports read and is read again from its retry", async () => {
     host!.service.reset();
     host!.service.side = "maker";
     host!.service.seed(55);
+    host!.service.failNextPage = true;
 
     const page = await opened(WIDTHS[1].viewport, "/voc");
+    const retry = page.locator("[data-next-page-foot]").getByRole("button", { name: say("common.action.retry") });
 
-    await page.waitForFunction(() => document.querySelectorAll("[data-report-row]").length === 50);
-    await page.getByRole("button", { name: say("voc.action.load_more") }).click();
+    await reportLink(page, "Seeded report 55").waitFor();
+    await scrollUntil(page, async () => (await retry.count()) > 0);
+    expect(await page.locator("[data-next-page-foot] [role=alert]").count()).toBe(1);
+    expect(await rowsShown(page)).toBe(50);
+
+    await retry.click();
     await page.waitForFunction(() => document.querySelectorAll("[data-report-row]").length === 58);
-    expect(await page.getByRole("button", { name: say("voc.action.load_more") }).count()).toBe(0);
-
   }, TEST_MS);
 
   test("a list that could not be read says why in one band, and its refresh reads it again", async () => {

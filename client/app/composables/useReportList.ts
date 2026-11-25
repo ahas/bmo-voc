@@ -28,12 +28,11 @@ export interface ReportList {
   /** Whether the list has been read under its filter, so a skeleton stands only before. */
   read: Ref<boolean>;
   reading: Ref<boolean>;
-  loadingMore: Ref<boolean>;
   /** Why the last read failed, in words; null while it went through. */
   failure: Ref<string | null>;
   /** Reads the rows shown again: as many as stand, from the first. */
   again: () => Promise<void>;
-  /** Reads the next page onto the end. */
+  /** Reads the next page onto the end; it throws where the page failed, which the list's foot says with its retry. */
   next: () => Promise<void>;
 }
 
@@ -44,7 +43,6 @@ export function useReportList(filter: () => ReportFilter): ReportList {
   const keyOf = computed(() => JSON.stringify([voc.me.value?.user ?? null, voc.me.value?.side ?? null, filter()]));
 
   const reading = ref(false);
-  const loadingMore = ref(false);
   const failure = ref<string | null>(null);
   // What the list last showed, which stands while a filter read for the first time is read, so the rows already on the
   // screen stay there rather than giving way to a skeleton.
@@ -84,20 +82,12 @@ export function useReportList(filter: () => ReportFilter): ReportList {
     const key = keyOf.value;
     const held = kept.get(key);
 
-    if (held === undefined || !held.more || loadingMore.value) return;
+    if (held === undefined || !held.more) return;
 
-    loadingMore.value = true;
+    const page = await voc.api.reports(filter(), held.items.length, PAGE);
+    const known = new Set(held.items.map((item) => item.id));
 
-    try {
-      const page = await voc.api.reports(filter(), held.items.length, PAGE);
-      const known = new Set(held.items.map((item) => item.id));
-
-      kept.set(key, { items: [...held.items, ...page.items.filter((item) => !known.has(item.id))], more: page.more });
-    } catch (error) {
-      voc.failed(error, "voc.message.read_failed");
-    } finally {
-      loadingMore.value = false;
-    }
+    kept.set(key, { items: [...held.items, ...page.items.filter((item) => !known.has(item.id))], more: page.more });
   }
 
   watch(keyOf, () => {
@@ -110,7 +100,6 @@ export function useReportList(filter: () => ReportFilter): ReportList {
     more: computed(() => standing.value?.more ?? false),
     read: computed(() => standing.value !== null),
     reading,
-    loadingMore,
     failure,
     again,
     next

@@ -134,6 +134,10 @@ plugin contract (bmo-ui `docs/console-bundles.md`). This unit serves its console
 
 - **The inbox:** every report, newest activity first, filtered by kind, state and company, each row with its kind,
   title, sender, company, state, when it was sent and a mark where it is unread for the maker.
+- **Both lists, the sender's reports and the inbox, are read fifty at a time, the next fifty as the list's end
+  comes into view** (bmo-ui's `NextPageFoot`, its `docs/design.md`, 「Lists」): placeholder rows stand at the end
+  while a page is on its way, a page that fails leaves the reports already read and stands its reason with a retry
+  in its place, and nothing stands under the last report. Nothing is pressed to read more.
 - **A report's thread:** its body, where it was sent from, its attachments, its state with its history and the
   control that moves it, the replies of both sides, and a box to answer the sender.
 
