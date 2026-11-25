@@ -111,10 +111,11 @@ The console is where a person signs in and sees every unit's screen, and how eac
 plugin contract (bmo-ui `docs/console-bundles.md`). This unit serves its console face through bmo-chat's
 `bmo-console-face`, and its browser bundle is built from the Nuxt project under `client/`.
 
-- **One entry, placed by the reader's role.** The bundle's entry is 고객의 소리. For a sender it stands in the
-  console's user menu, the reader's own menu (the contract's `account` section), since sending the maker a word is
-  about the reader's own use of the console rather than an application they work in; for the maker it stands among
-  the 관리자 서비스 (the contract's sections by role). So a platform administrator never meets the send side.
+- **One entry, placed and named by the reader's role.** For the maker the bundle's entry is 고객의 소리; for a sender
+  it is 문의, the word a person sending the maker a word looks for in their own menu (the contract's names by role). For a
+  sender it stands in the console's user menu, the reader's own menu (the contract's `account` section), since sending
+  the maker a word is about the reader's own use of the console rather than an application they work in; for the maker
+  it stands among the 관리자 서비스 (the contract's sections by role). So a platform administrator never meets the send side.
 - **One screen path, two faces.** `/voc` opens the sender's own reports for a sender and the inbox for the maker;
   `/voc/{report}` opens one report's thread for either. The screen asks the service which side the reader is on.
 - **The screen speaks the console's language.** Its words are the bundle's pack in English, Korean, Japanese and

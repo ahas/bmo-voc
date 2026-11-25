@@ -9,6 +9,7 @@
   "ownerKey": true,
   "sidebarSection": "account",
   "sidebarSections": { "administrator": "administration" },
+  "sidebarTitles": { "member": "voc.member_title" },
   "events": true,
   "pushKinds": ["report.received", "report.answered", "report.followed"],
   "pushPlaces": {

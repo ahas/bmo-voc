@@ -1,6 +1,7 @@
 {
   "voc": {
     "title": "客户之声",
+    "member_title": "联系我们",
     "kind": {
       "bug": "缺陷",
       "suggestion": "建议"

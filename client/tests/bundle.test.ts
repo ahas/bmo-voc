@@ -49,10 +49,13 @@ test("every pack's word fills the same placeholders as the English one", () => {
   }
 });
 
-test("the title key the manifest names stands in every pack", () => {
+test("the title keys the manifest names, its own and a member's, stand in every pack", () => {
   expect(word(EN, "voc.title")).toBe("Customer voice");
+  expect(word(EN, "voc.member_title")).toBe("Contact");
 
-  for (const [locale, pack] of Object.entries(PACKS)) expect(word(pack, "voc.title"), locale).toBeString();
+  for (const [locale, pack] of Object.entries(PACKS)) {
+    for (const key of ["voc.title", "voc.member_title"]) expect(word(pack, key), `${locale} ${key}`).toBeString();
+  }
 });
 
 test("the words the screens build from a value stand in every pack", () => {

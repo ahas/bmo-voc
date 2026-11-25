@@ -1,6 +1,7 @@
 {
   "voc": {
     "title": "お客様の声",
+    "member_title": "お問い合わせ",
     "kind": {
       "bug": "不具合",
       "suggestion": "要望"

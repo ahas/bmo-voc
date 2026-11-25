@@ -100,7 +100,8 @@ same guard over the routes the screens call. This service supplies the face:
 - **its declaration** of the manifest fields it decides: name `voc`, title `voc.title`, icon
   `i-material-symbols-campaign-outline`, screen path `/voc`, service name `voc`, API prefix `/`, role `member` and the
   owner key; the entry in the `account` section, and in `administration` for an `administrator` (the contract's
-  sections by role); events (the stream above), with the notice kinds `report.received`, `report.answered` and
+  sections by role), named by `voc.member_title` for a `member` and by the title for an `administrator` (the contract's
+  names by role); events (the stream above), with the notice kinds `report.received`, `report.answered` and
   `report.followed`, each opening `/voc/{reportId}`, the first and the last read by the readers holding the
   `administrator` role and `report.answered` by the account its `sender` names; the sidebar count read from
   `/unread` under `count`; no calls, socket, relays or share reads;

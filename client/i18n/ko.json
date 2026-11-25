@@ -1,6 +1,7 @@
 {
   "voc": {
     "title": "고객의 소리",
+    "member_title": "문의",
     "kind": {
       "bug": "버그",
       "suggestion": "건의"

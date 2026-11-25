@@ -109,7 +109,7 @@
           <EmptyList v-else-if="list.read.value && list.items.value.length === 0" :words="maker ? (filtering ? $t('voc.message.inbox_no_match') : $t('voc.message.inbox_empty')) : $t('voc.message.sender_empty')" />
 
           <template v-else-if="list.read.value">
-            <ul class="flex flex-col" :aria-label="$t('voc.title')">
+            <ul class="flex flex-col" :aria-label="maker ? $t('voc.title') : $t('voc.member_title')">
               <li v-for="report in list.items.value" :key="report.id">
                 <ReportRow :report="report" :maker="maker" />
               </li>

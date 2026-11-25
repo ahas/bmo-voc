@@ -1,6 +1,7 @@
 {
   "voc": {
     "title": "Customer voice",
+    "member_title": "Contact",
     "kind": {
       "bug": "Bug",
       "suggestion": "Suggestion"
