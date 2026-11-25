@@ -55,7 +55,7 @@ async fn every_route_is_guarded_and_the_role_names_the_side() {
   assert_eq!(service.ask(Method::GET, "/health", None, &[], None).await.0, 401);
   let (status, health) = service.everything(Method::GET, "/health", None).await;
   assert_eq!(status, 200);
-  assert_eq!(health, json!({ "ready": true, "reason": null, "version": env!("CARGO_PKG_VERSION") }));
+  assert_eq!(health, json!({ "ready": true, "reason": null, "version": bmo_voc::VERSION }));
   service.stop().await;
 }
 

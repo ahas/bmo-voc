@@ -11,7 +11,7 @@ use bmo_voc::wire::Health;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
-#[command(name = "bmo-voc", version, about = "The voc service and its command.")]
+#[command(name = "bmo-voc", version = bmo_voc::VERSION, about = "The voc service and its command.")]
 struct Command {
   #[command(subcommand)]
   verb: Verb,

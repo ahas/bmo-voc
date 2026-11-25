@@ -31,7 +31,8 @@ histories, their replies and each side's read marks — in its own SQLite store 
   bundle's `ja` and `zh-CN` words alone, besides the README's translations.
 - **No personal data, no names of agents, owners, hosts or companies, and no public addresses** in code, documents
   or commits; a public name, a port and a credential are deployment settings (`PERSONAL-DATA.md`).
-- **Versions:** `0.1.0-rev.N` until a release the owner declares; no sibling version pins.
+- **Versions:** the set's, read off the git tags when a build is made (bmo-chat's `docs/conventions.md`,
+  「Versions」); the manifests' version fields are placeholders that never move; no sibling version pins.
 - Depend only on registry crates and the base libraries (bmo-console-face, taken by path, and bmo-ui); the console
   bundle vendors the bmo-ui release bmo-chat's `shared-versions.toml` pins, as its release file stands, beside its
   own lockfile; other units through their documented APIs.
