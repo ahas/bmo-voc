@@ -4,7 +4,7 @@
 [package]
 name = "bmo-voc"
 description = "The customers' voice box: the bug reports and suggestions people send the platform's maker, and where the maker reads, judges and answers them."
-version = "0.1.0-rev.1"
+version = "0.0.0"
 edition = "2024"
 license = "MIT"
 publish = false

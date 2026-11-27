@@ -684,7 +684,7 @@
   "info": {
     "description": "The platform's customers' voice box. A person who uses the platform sends its maker a bug report or a suggestion, with screenshots and other files; the platform administrators, the maker's side, read every report of every company, move it through its states and answer it, and the sender answers back on the same report. It keeps the reports, their attachments, their state histories, their replies and each side's read mark in its own store, and reads the account service for each writer's name and a sender's company. Bodies are JSON with camelCase keys, but a report sent, which is multipart form data; times are epoch milliseconds, ids are strings, lists are pages of items and more, and every failure is the error shape with its status.",
     "title": "bmo-voc",
-    "version": "0.1.0-rev.1"
+    "version": "0.0.0"
   },
   "openapi": "3.1.0",
   "paths": {
