@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, expect, test } from "bun:test";
-import { ofetch } from "ofetch";
+import { createFetch, ofetch } from "ofetch";
 
 import { Refusal, Unreachable, attachmentPath, createVocApi } from "../app/domain/api";
 
@@ -110,7 +110,10 @@ test("a report is sent as its JSON part and one part for each file", async () =>
 test("a refusal carries its status and code, and a service not there is unreachable", async () => {
   const api = createVocApi(call);
   const absent = createVocApi((path, options) => call(`/absent${path}`, options));
-  const nowhere = createVocApi((path) => ofetch(`http://127.0.0.1:1${path}`));
+  // A request that reaches no service fails in the fetch itself, as a refused or dropped connection does; the failure
+  // is made here rather than asked of a closed port, whose answer differs from one machine's network to another's.
+  const severed = createFetch({ fetch: () => Promise.reject(new TypeError("fetch failed")) });
+  const nowhere = createVocApi((path) => severed(`http://voc.invalid${path}`));
 
   const refused = await api.report("r-9").catch((error: unknown) => error);
 
